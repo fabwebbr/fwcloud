@@ -1,0 +1,31 @@
+#!/bin/bash
+
+USER_DIR="/home/f5consult"
+
+clear
+echo ""
+echo "------------------------------------------"
+read -p "Em qual domínio o banco será usado: " dominio
+read -p "Informe o nome do novo banco: " banco
+read -p "Informe a senha de acesso: " password
+read -p "Host com acesso permitido (localhost = acesso local; % = acesso externo): " host
+clear
+mysql -e "create database $banco";
+mysql -e "create user '$banco'@'$host' IDENTIFIED BY '$password'";
+mysql -e "GRANT ALL PRIVILEGES ON $banco.* TO '$banco'@'$host'";
+mysql -e "FLUSH PRIVILEGES";
+
+cat > $USER_DIR/banco-$dominio.txt <<EOF
+Banco de dados para o domínio $dominio
+
+Nome do banco: $banco
+Nome de usuário: $banco
+Senha de acesso: $password
+Acesso: $host
+EOF
+
+clear
+echo ""
+echo ""
+echo "Banco foi criado com sucesso. Os dados de acesso estão em $USER_DIR/banco-$dominio.txt"
+echo "----------------------------------------------------------------------------------------"

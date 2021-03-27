@@ -1,0 +1,20 @@
+#!/bin/bash
+
+clear
+echo "----------------------------------------------------------"
+echo "			Escolha uma das opções abaixo		"
+echo ""
+echo "1) Adicionar um novo domínio ao nginx"
+echo "2) Adicionar um novo banco de dados"
+echo "3) Fazer backup de um site"
+echo "x) Sair"
+echo ""
+echo "----------------------------------------------------------"
+read -p "O que deseja fazer? " acao
+
+case $acao in
+"1") /usr/bin/fw_addsite;;
+"2") /usr/bin/fw_addmysql;;
+[XxQq]) clear; exit;;
+*) echo "Escolha uma opção válida."; sleep 2; /usr/bin/fwcloud;;
+esac
