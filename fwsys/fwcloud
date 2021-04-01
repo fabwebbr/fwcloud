@@ -15,6 +15,7 @@ read -p "O que deseja fazer? " acao
 case $acao in
 "1") /usr/bin/fw_addsite;;
 "2") /usr/bin/fw_addmysql;;
+"3") /usr/bin/fw_backup;;
 [XxQq]) clear; exit;;
 *) echo "Escolha uma opção válida."; sleep 2; /usr/bin/fwcloud;;
 esac

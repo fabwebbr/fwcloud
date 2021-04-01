@@ -1,0 +1,43 @@
+#!/bin/bash
+source /usr/local/fwcloud/fw.conf
+
+VHOST_LOCATION="/etc/apache/sites-available"
+clear
+
+read -p "Informe qual será o novo domínio: " site
+clear
+
+mkdir $SITE_DIR/$site
+chown www-data:www-data $SITE_DIR/$site
+
+cat > $VHOST_LOCATION/$site.conf << EOF
+<VirtualHost *:80>
+
+        ServerAdmin $ADMIN_MAIL
+        DocumentRoot $SITE_DIR/$site
+
+        ServerName $site
+        ServerAlias www.$site
+
+        ErrorLog ${APACHE_LOG_DIR}/$site-error.log
+        CustomLog ${APACHE_LOG_DIR}/$site-access.log combined
+
+    <Directory $SITE_DIR/$site>
+        Options -Indexes -FollowSymLinks +SymLinksIfOwnerMatch
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+ <Files ".htaccess">
+   Order allow,deny
+   Deny from all
+ </Files>
+EOF
+
+# Restart
+echo "Domínio $site criado com sucesso"
+sleep 1
+a2ensite $site
+echo "Domínio $site habilitado com sucesso"
+systemctl reload apache2
+exit
